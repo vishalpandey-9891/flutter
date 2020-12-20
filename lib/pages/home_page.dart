@@ -2,23 +2,25 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:new_flutter_project/utils/Constants.dart';
 import '../drawer.dart';
+import 'login_page.dart';
 
-// stateless widget means nothing changes here
 class HomePage extends StatefulWidget {
+  static const String routeName1 = "/home";
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  // var myText = "CHANGE MY NAME";
-  // TextEditingController _namecontroller = TextEditingController();
+  // var myText = "Change My Name";
+  // TextEditingController _nameController = TextEditingController();
+
   var url = "https://jsonplaceholder.typicode.com/photos";
   var data;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchData();
   }
@@ -27,23 +29,28 @@ class _HomePageState extends State<HomePage> {
     var res = await http.get(url);
     data = jsonDecode(res.body);
     setState(() {});
-    print(data);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-  }
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text("Awesome App"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              Constants.prefs.setBool("loggedIn", false);
+              Navigator.pushReplacementNamed(context, LoginPage.routeName1);
+            },
+          )
+        ],
       ),
       body: data != null
           ? ListView.builder(
@@ -62,8 +69,8 @@ class _HomePageState extends State<HomePage> {
       drawer: MyDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // myText = _namecontroller.text;
-          setState(() {});
+          // myText = _nameController.text;
+          // setState(() {});
         },
         child: Icon(Icons.send),
       ),
