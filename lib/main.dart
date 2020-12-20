@@ -21,10 +21,37 @@ class HomePage extends StatelessWidget {
         title: Text("Awesome App"),
       ),
       body: Center(
-        child: Container(
-          height: 100,
-          width: 100,
-          color: Colors.teal,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Card(
+              child: Column(
+                children: <Widget>[
+                  Image.asset("assets/bg.jpeg"),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "change my name",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "enter some text here",
+                        labelText: "Name",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
         ),
       ),
       drawer: Drawer(
