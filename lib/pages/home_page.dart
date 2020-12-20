@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-import '../card.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import '../drawer.dart';
 
 // stateless widget means nothing changes here
@@ -10,12 +11,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var myText = "CHANGE MY NAME";
-  TextEditingController _namecontroller = TextEditingController();
+  // var myText = "CHANGE MY NAME";
+  // TextEditingController _namecontroller = TextEditingController();
+  var url = "https://jsonplaceholder.typicode.com/photos";
+  var data;
 
   @override
   void initState() {
     // TODO: implement initState
+    super.initState();
+    fetchData();
+  }
+
+  fetchData() async {
+    var res = await http.get(url);
+    data = jsonDecode(res.body);
+    setState(() {});
+    print(data);
   }
 
   @override
@@ -33,18 +45,24 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text("Awesome App"),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: MyCard(myText: myText, namecontroller: _namecontroller),
-          ),
-        ),
-      ),
+      body: data != null
+          ? ListView.builder(
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(data[index]["title"]),
+                  subtitle: Text("ID: ${data[index]["id"]}"),
+                  leading: Image.network(data[index]["url"]),
+                );
+              },
+              itemCount: data.length,
+            )
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
       drawer: MyDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          myText = _namecontroller.text;
+          // myText = _namecontroller.text;
           setState(() {});
         },
         child: Icon(Icons.send),
